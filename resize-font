@@ -137,9 +137,11 @@ sub update_font_size {
     if ($index < 0) { $index = 0; }
     if ($index > $#fixed) { $index = $#fixed; }
     $current = $fixed[$index];
-  }
-  else {
-    $current =~ s/$regex/$1+$delta/e;
+  } else {
+    $current =~ s{ $regex }{
+        my $new_size = $1 + $delta;
+        ($new_size >= 4 and $new_size <= 200) ? $new_size : $1;
+    }ex;
   }
   set_font($self, $font, $current);
 }
